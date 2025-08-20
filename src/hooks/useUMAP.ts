@@ -17,7 +17,7 @@ interface UseUMAPResult {
   runUMAP: () => void;
 }
 
-export const useUMAP = (data: number[][], labels: (number)[], umapParams: UMAPParams): UseUMAPResult => {
+export const useUMAP = (data: number[][], labels: number[], umapParams: UMAPParams): UseUMAPResult => {
   const [embedding, setEmbedding] = useState<number[][] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC } from 'react';
 import Sidebar from './components/Sidebar.tsx';
 import MainContent from './components/MainContent.tsx';
 import UIMain from './components/UIMain.tsx';
@@ -35,7 +35,7 @@ function parseCSV(text: string): RawData {
   return { header, rows };
 }
 
-function detectNumericColumns(header: string[], rows: string[][]): number[] {
+function detectNumericColumns(header: string[], rows: any[][]): number[] {
   const idx: number[] = [];
   header.forEach((_h, i) => {
     let ok = true;
@@ -54,10 +54,13 @@ function detectNumericColumns(header: string[], rows: string[][]): number[] {
 }
 
 // Helper function to map strings to numbers
-function mapStringsToNumbers(values: (string | null)[]): number[] {
+function mapStringsToNumbers(values: (string | number | null)[]): number[] {
   const valueMap = new Map<string, number>();
   return values.map(val => {
     if (val === null || val === '') return -1;
+    if (typeof val === 'number') {
+      return val as number
+    }
     if (!valueMap.has(val)) {
       valueMap.set(val, valueMap.size);
     }
@@ -69,7 +72,7 @@ const App: FC = () => {
   const [rawData, setRawData] = useState<RawData>({ header: [], rows: [] });
   const [loadedFileName, setLoadedFileName] = useState<string | null>(null);
   const [data, setData] = useState<number[][]>([]);
-  const [labels, setLabels] = useState<(string | null)[]>([]);
+  const [labels, setLabels] = useState<number[]>([]);
   const [shapeLabels, setShapeLabels] = useState<(string | null)[]>([]);
   const [selectedFeatureIndices, setSelectedFeatureIndices] = useState<number[]>([]);
   const [selectedTooltipIndices, setSelectedTooltipIndices] = useState<number[]>([])
@@ -128,15 +131,12 @@ const App: FC = () => {
     );
     setData(feats);
 
-    let umapLabels: (string | null)[];
     if (isSupervised && supervisedColumnIndex >= 0) {
-      const rawLabels = rawData.rows.map((r) => r[supervisedColumnIndex] ?? null);
-      const mappedLabels = mapStringsToNumbers(rawLabels);
-      umapLabels = mappedLabels.map(l => l.toString());
+        setLabels( mapStringsToNumbers(rawData.rows.map((r) => r[supervisedColumnIndex])) )
     } else {
-      umapLabels = Array(rawData.rows.length).fill(null);
+      setLabels( Array(rawData.rows.length).fill(null))
     }
-    setLabels(umapLabels);
+  
     
     setUmapParams((prev) => ({ ...prev, supervised: isSupervised }));
   };

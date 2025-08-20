@@ -24,10 +24,7 @@ interface MainContentProps {
   umapParams: UMAPParams;
   setUmapParams: React.Dispatch<React.SetStateAction<UMAPParams>>;
   hasUsableLabels: () => boolean;
-  rawData: {
-    header: string[];
-    rows: string[][];
-  };
+  rawData: RawData;
   selectedTooltipIndices: number[];
 }
 
@@ -37,8 +34,6 @@ const MainContent: FC<MainContentProps> = ({
   shapeLabels,
   activeCategories,
   activeShapes,
-  setActiveCategories,
-  setActiveShapes,
   umapParams,
   setUmapParams,
   hasUsableLabels,

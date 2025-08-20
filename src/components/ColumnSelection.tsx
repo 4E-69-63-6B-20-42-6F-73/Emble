@@ -14,7 +14,7 @@ interface ColumnInfo {
   isPurelyNumeric: boolean;
 }
 
-function getFeatureColumns(header: string[], rows: string[][]): ColumnInfo[] {
+function getFeatureColumns(header: string[], rows: any[][]): ColumnInfo[] {
   if (header.length === 0 || rows.length === 0) return [];
 
   return header.map((name, index) => {
@@ -44,7 +44,7 @@ function getFeatureColumns(header: string[], rows: string[][]): ColumnInfo[] {
 
 const ColumnSelection: FC<ColumnSelectionProps> = ({
   name,
-  autoSelect = false,
+  autoSelect,
   rawData,
   selectedFeatureIndices,
   setSelectedFeatureIndices,

@@ -21,11 +21,7 @@ interface UMAPChartProps {
   pointSize: number;
   currentTransform: d3.ZoomTransform | null;
   setCurrentTransform: React.Dispatch<React.SetStateAction<d3.ZoomTransform | null>>;
-  loading: boolean;
-  rawData: {
-    header: string[];
-    rows: string[][];
-  };
+  rawData: RawData;
   selectedTooltipIndices: number[];
 }
 
@@ -38,7 +34,6 @@ const UMAPChart: FC<UMAPChartProps> = ({
   pointSize,
   currentTransform,
   setCurrentTransform,
-  loading,
   rawData,
   selectedTooltipIndices,
 }) => {
@@ -58,7 +53,7 @@ const UMAPChart: FC<UMAPChartProps> = ({
       return;
     }
 
-    const { width, height } = svgRef.current.getBoundingClientRect();
+    const { width, height } = svgRef.current?.getBoundingClientRect() ?? { width: 200, height: 200 };
     svg.attr('viewBox', `0 0 ${width} ${height}`);
 
     if (!viewportRef.current) {
@@ -120,7 +115,7 @@ const UMAPChart: FC<UMAPChartProps> = ({
       .attr('d', (d) => d3.symbol().type(symbolFor(d)).size(size)())
       .attr('stroke', 'white')
       .attr('stroke-width', 0.5)
-      .on('mouseover', (e, d) => {
+      .on('mouseover', (_, d) => {
         tooltip.classed('hidden', false);
         let tooltipContent = `<div class="flex items-center gap-2">`;
         if (d.c !== null) {
@@ -160,29 +155,12 @@ const UMAPChart: FC<UMAPChartProps> = ({
         .attr('display', null);
     });
 
-  }, [embedding, labels, shapeLabels, pointSize, activeCategories, activeShapes, currentTransform, setCurrentTransform, loading, rawData, selectedTooltipIndices]);
+  }, [embedding, labels, shapeLabels, pointSize, activeCategories, activeShapes, currentTransform, setCurrentTransform, rawData, selectedTooltipIndices]);
 
   return (
     <div id="chartWrap" className="absolute inset-0">
       <svg id="chart" ref={svgRef} className="w-full h-full"></svg>
       <div id="tooltip" ref={tooltipRef} className="hidden absolute bg-white/90 backdrop-blur px-2 py-1 text-xs rounded border shadow"></div>
-      {loading && (
-        <div id="loading" className="absolute inset-0 flex items-center justify-center bg-white">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-8 h-8 border-2 border-gray-300 rounded-full border-t-gray-800" style={{ animation: 'spin 0.9s linear infinite' }}></div>
-            <div className="text-xs text-gray-600">Calculating UMAP…</div>
-          </div>
-        </div>
-      )}
-      {!embedding && !loading && (
-        <div id="empty" className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <i className="fa-solid fa-file-arrow-up text-3xl mb-2"></i>
-            <div className="font-medium">No data yet</div>
-            <div className="text-xs">Upload or drop a CSV/TSV and select feature columns to run UMAP.</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

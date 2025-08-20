@@ -2,12 +2,6 @@ import React, { FC } from 'react';
 import Legend from './Legend.tsx';
 import ColumnSelection from './ColumnSelection.tsx';
 
-// Type definitions
-interface RawData {
-  header: string[];
-  rows: string[][];
-}
-
 interface UIMainProps {
   rawData: RawData;
   handleColorChange: (idx: number) => void;
@@ -22,7 +16,7 @@ interface UIMainProps {
   setSelectedTooltipIndices: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-function getNonNumericColumns(header: string[], rows: string[][]): { name: string; index: number }[] {
+function getNonNumericColumns(header: string[], rows: any[][]): { name: string; index: number }[] {
   const numericIndices = new Set(header.map((_h, i) => {
     for (const r of rows) {
       const v = r[i];
@@ -109,6 +103,7 @@ const UIMain: FC<UIMainProps> = ({
 
       <ColumnSelection
         name='Tooltip'
+        autoSelect={false}
         rawData={rawData}
         selectedFeatureIndices={selectedTooltipIndices}
         setSelectedFeatureIndices={setSelectedTooltipIndices}

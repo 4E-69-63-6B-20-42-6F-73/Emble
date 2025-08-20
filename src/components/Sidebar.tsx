@@ -16,7 +16,7 @@ interface SidebarProps {
   setSelectedTooltipIndices: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-function getNonNumericColumns(header: string[], rows: string[][]): { name: string; index: number }[] {
+function getNonNumericColumns(header: string[], rows: any[][]): { name: string; index: number }[] {
   if (header.length === 0 || rows.length === 0) return [];
   const numericIndices = new Set(header.map((_h, i) => {
     for (const r of rows) {
