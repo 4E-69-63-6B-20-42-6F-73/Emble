@@ -5,6 +5,7 @@ import UIMain from './components/UIMain.tsx';
 import LoadingScreen from './components/LoadingScreen.tsx';
 import EmptyState from './components/EmptyState.tsx';
 import { useUMAP } from './hooks/useUMAP.ts';
+import { parseFile } from './utils/parse.ts';
 
 // Type definitions
 interface UMAPParams {
@@ -13,26 +14,6 @@ interface UMAPParams {
   epochs: number;
   supervised: boolean;
   pointSize: number;
-}
-
-function parseCSV(text: string): RawData {
-  const delim = text.includes('\t') ? '\t' : ',';
-  const lines = text.trim().split(/\r?\n/);
-  const header = lines[0].split(delim).map((s) => s.trim().replace(/"/g, ''));
-  const rows = lines.slice(1).filter((l) => l.trim().length > 0).map((l) =>
-    l.split(delim).map(cell => {
-      const trimmedCell = cell.trim().replace(/"/g, '');
-      if (trimmedCell === '') {
-        return "";
-      }
-      const numValue = +trimmedCell;
-      if (Number.isFinite(numValue)) {
-        return numValue;
-      }
-      return trimmedCell;
-    })
-  );
-  return { header, rows };
 }
 
 function detectNumericColumns(header: string[], rows: any[][]): number[] {
@@ -96,8 +77,7 @@ const App: FC = () => {
   const handleFileLoad = async (file: File | null): Promise<void> => {
     if (!file) return;
     try {
-      const text = await file.text();
-      const parsed = parseCSV(text);
+      const parsed = await parseFile(file);
       setRawData(parsed);
       setLoadedFileName(file.name);
       const numericIndices = detectNumericColumns(parsed.header, parsed.rows);

@@ -56,12 +56,12 @@ const EmptyState: FC<EmptyStateProps> = ({ handleFileLoad }) => {
       <div className="text-center text-gray-500">
         <i className="fa-solid fa-file-arrow-up text-3xl mb-2"></i>
         <div className="font-medium">Click or drag and drop a file</div>
-        <div className="text-xs">CSV or TSV file with headers</div>
+        <div className="text-xs">CSV or Excel file with headers</div>
       </div>
       <input 
         ref={fileInputRef} 
         type="file" 
-        accept=".csv,.tsv,.txt"
+        accept=".csv,.tsv,.xls,.xlsx,text/csv,text/tab-separated-values"
         className="hidden" 
         onChange={handleFileChange} 
       />
