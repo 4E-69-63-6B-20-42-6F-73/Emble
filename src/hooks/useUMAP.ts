@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { UMAP } from 'umap-js';
+import seedrandom from 'seedrandom';
 
 // Type definitions
 interface UMAPParams {
@@ -31,7 +32,8 @@ export const useUMAP = (data: number[][], labels: number[], umapParams: UMAPPara
     setProgress(0);
 
     const { nNeighbors, minDist, epochs, supervised } = umapParams;
-    const umap = new UMAP({ nNeighbors, minDist, nEpochs: epochs });
+    const rng = seedrandom("42")
+    const umap = new UMAP({ nNeighbors, minDist, nEpochs: epochs, random:rng });
 
     const hasUsableLabels = new Set(labels.filter(Boolean)).size > 1 && labels.length === data.length;
     if (supervised && hasUsableLabels) {
