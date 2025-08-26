@@ -1,13 +1,5 @@
 import React, { useRef, useEffect, FC } from 'react';
-
-// Type definitions
-interface UMAPParams {
-  nNeighbors: number;
-  minDist: number;
-  epochs: number;
-  supervised: boolean;
-  pointSize: number;
-}
+import { UMAPParams } from '../hooks/UMAPParams';
 
 interface UMAPSettingsProps {
   umapParams: UMAPParams;
@@ -39,8 +31,13 @@ const UMAPSettings: FC<UMAPSettingsProps> = ({ umapParams, setUmapParams, onClos
     }));
   };
 
+  const handleMetricChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as "euclidean" | "cosine";
+    setUmapParams(prev => ({ ...prev, metric: value }))
+  }
+
   return (
-    <div ref={popupRef} id="paramsPopup" className="absolute right-0 mt-2 w-72 bg-white border rounded-xl shadow-lg p-3 space-y-3">
+ <div ref={popupRef} id="paramsPopup" className="absolute right-0 mt-2 w-72 bg-white border rounded-xl shadow-lg p-3 space-y-3">
       <div className="text-xs uppercase text-gray-500">UMAP Parameters</div>
       <label className="text-sm flex items-center justify-between gap-2">nNeighbors
         <input id="nNeighbors" type="range" min="2" max="50" step="1" value={umapParams.nNeighbors} onChange={handleInputChange} className="w-36" />
@@ -57,6 +54,13 @@ const UMAPSettings: FC<UMAPSettingsProps> = ({ umapParams, setUmapParams, onClos
       <label className="text-sm flex items-center justify-between gap-2">Point size
         <input id="pointSize" type="range" min="1" max="8" step="1" value={umapParams.pointSize} onChange={handleInputChange} className="w-36" />
         <span id="rVal" className="text-xs w-6 text-right">{umapParams.pointSize}</span>
+      </label>
+
+      <label className="text-sm flex items-center justify-between gap-2">Metric
+        <select id="metric" value={umapParams.metric} onChange={handleMetricChange} className="grow border rounded px-2 py-1 text-sm">
+          <option value="euclidean">euclidean</option>
+          <option value="cosine">cosine</option>
+        </select>
       </label>
     </div>
   );

@@ -6,15 +6,7 @@ import LoadingScreen from './components/LoadingScreen.tsx';
 import EmptyState from './components/EmptyState.tsx';
 import { useUMAP } from './hooks/useUMAP.ts';
 import { parseFile } from './utils/parse.ts';
-
-// Type definitions
-interface UMAPParams {
-  nNeighbors: number;
-  minDist: number;
-  epochs: number;
-  supervised: boolean;
-  pointSize: number;
-}
+import { UMAPParams } from './hooks/UMAPParams.ts';
 
 function detectNumericColumns(header: string[], rows: any[][]): number[] {
   const idx: number[] = [];
@@ -70,6 +62,7 @@ const App: FC = () => {
     epochs: 400,
     supervised: isSupervised,
     pointSize: 3,
+    metric: 'euclidean'
   });
 
   const { embedding, isLoading, progress } = useUMAP(data, labels, umapParams);

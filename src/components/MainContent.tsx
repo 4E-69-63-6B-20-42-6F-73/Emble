@@ -4,15 +4,7 @@ import UMAPSettings from './UMAPSettings.tsx';
 import UMAPChart from './UMAPChart.tsx';
 import * as d3 from 'd3';
 import { exportImage } from '../utils/exporter.ts';
-
-// Type definitions
-interface UMAPParams {
-  nNeighbors: number;
-  minDist: number;
-  epochs: number;
-  supervised: boolean;
-  pointSize: number;
-}
+import { UMAPParams } from '../hooks/UMAPParams.ts';
 
 interface MainContentProps {
   embedding: number[][] | null;

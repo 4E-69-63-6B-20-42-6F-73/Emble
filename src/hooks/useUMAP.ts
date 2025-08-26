@@ -1,15 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { UMAP } from 'umap-js';
 import seedrandom from 'seedrandom';
-
-// Type definitions
-interface UMAPParams {
-  nNeighbors: number;
-  minDist: number;
-  epochs: number;
-  supervised: boolean;
-  pointSize: number;
-}
+import { euclidean, cosine } from 'umap-js/dist/umap';
+import { UMAPParams } from './UMAPParams';
 
 interface UseUMAPResult {
   embedding: number[][] | null;
@@ -31,9 +24,9 @@ export const useUMAP = (data: number[][], labels: number[], umapParams: UMAPPara
     setIsLoading(true);
     setProgress(0);
 
-    const { nNeighbors, minDist, epochs, supervised } = umapParams;
+    const { nNeighbors, minDist, epochs, supervised, metric } = umapParams;
     const rng = seedrandom("42")
-    const umap = new UMAP({ nNeighbors, minDist, nEpochs: epochs, random:rng });
+    const umap = new UMAP({ nNeighbors, minDist, nEpochs: epochs, random:rng, distanceFn: metric === 'euclidean' ? euclidean : cosine });
 
     const hasUsableLabels = new Set(labels.filter(Boolean)).size > 1 && labels.length === data.length;
     if (supervised && hasUsableLabels) {
