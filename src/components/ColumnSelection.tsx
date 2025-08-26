@@ -49,7 +49,7 @@ const ColumnSelection: FC<ColumnSelectionProps> = ({
   selectedFeatureIndices,
   setSelectedFeatureIndices,
 }) => {
-  const featureColumns = getFeatureColumns(rawData.header, rawData.rows);
+  const featureColumns = getFeatureColumns(rawData.header, rawData.rows).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows))
 
   useEffect(() => {
     if(autoSelect){
@@ -77,7 +77,7 @@ const ColumnSelection: FC<ColumnSelectionProps> = ({
   return (
     <div className="space-y-2 border-t pt-3">
       <div className="text-xs uppercase text-gray-500">{name}</div>
-      <div className="max-h-56 overflow-y-auto space-y-1">
+      <div className="max-h-56 overflow-y-auto space-y-1 bg-gray-50 rounded-lg p-2 border">
         {featureColumns.length > 0 ? (
           featureColumns.map((col) => (
             <label
