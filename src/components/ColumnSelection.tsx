@@ -49,8 +49,8 @@ const ColumnSelection: FC<ColumnSelectionProps> = ({
   selectedFeatureIndices,
   setSelectedFeatureIndices,
 }) => {
-  const featureColumns = getFeatureColumns(rawData.header, rawData.rows).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows)).concat(getFeatureColumns(rawData.header, rawData.rows))
-
+  const featureColumns = getFeatureColumns(rawData.header, rawData.rows)
+  
   useEffect(() => {
     if(autoSelect){
     const defaultSelection = [];
